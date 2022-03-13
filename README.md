@@ -4,6 +4,7 @@ A console app made in Python to download youtube files with a subtitle generated
 
 ## Installation
 
+install python 3.6.2 or above<br/>
 pip install -r config/requirements.txt
 
 ## Usage
