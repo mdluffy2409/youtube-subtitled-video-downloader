@@ -21,7 +21,7 @@ def translateLine(line):
 
 def translateSubtitle(src):
     lines_to_read = open(src, "r")  
-    lines = [line.replace('\n', '') for line in lines_to_read]
+    lines = [line for line in lines_to_read]
     selected_lines = [lines[pos] for pos in range(2, len(lines), 4)]
 
     with ThreadPool(os.cpu_count()) as p:
