@@ -1,5 +1,3 @@
-from cmath import e
-from pdb import line_prefix
 from googletrans import Translator
 import threading 
 from multiprocessing.dummy import Pool as ThreadPool

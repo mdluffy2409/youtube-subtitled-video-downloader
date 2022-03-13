@@ -1,4 +1,3 @@
-from pytube import YouTube
 import os
 
 cwd = os.getcwd()
