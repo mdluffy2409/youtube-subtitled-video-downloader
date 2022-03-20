@@ -1,6 +1,7 @@
 from youtube_transcript_api import YouTubeTranscriptApi
 import os
 from TranslateSubtitle import translateSubtitle
+from pathlib import Path
 
 cwd = os.getcwd()
 
@@ -11,9 +12,15 @@ def parseLine(i, line, f):
     f.write("{}\n\n".format(line["text"]).encode("utf8"))
 
 def getSubtitle(url, title):
-    srt = YouTubeTranscriptApi.get_transcript(url) 
-    src = os.path.join(cwd, "Files", title, title + '.srt')
-    with open(src, "wb") as f:      
-        for i in range(len(srt)):
-            parseLine(i, srt[i], f)
-    translateSubtitle(src)
+    try:
+        srt = YouTubeTranscriptApi.get_transcript(url) 
+        partial_src = os.path.join(cwd, "Files", title)
+        Path(partial_src).mkdir(parents=True, exist_ok=True)
+        src = os.path.join(partial_src, title + '.srt')
+        with open(src, "wb") as f:      
+            for i in range(len(srt)):
+                parseLine(i, srt[i], f)
+        translateSubtitle(src)
+    except:
+        print("No transcription available for this File")
+    
