@@ -6,13 +6,15 @@ import os
 lock = threading.Lock()
 translator = Translator()
 
-def copyTranslation(lines, new_lines, src):  
+def copyTranslation(lines, new_lines, src): 
+    pos = 0 
     with open(src, "wb") as f:  
-        for pos in range(0, len(lines), 4):      
-            f.write("{}".format(lines[pos]).encode("utf8"))
-            f.write("{}".format(lines[pos + 1]).encode("utf8"))
-            f.write("{}".format(new_lines[int(pos / 4)]).encode("utf8"))
-            f.write("{}".format(lines[pos + 3]).encode("utf8"))
+        for line in lines:      
+            if len(line) > 3 and line.find('-->') == -1:
+                f.write("{}".format(new_lines[pos]+'\n').encode("utf8"))
+                pos+=1
+            else:
+                f.write("{}".format(line).encode("utf8"))   
 
 def translateLine(line):
     translation = translator.translate(line, dest='es')
@@ -22,7 +24,7 @@ def translateLine(line):
 def translateSubtitle(src):
     lines_to_read = open(src, "r")  
     lines = [line for line in lines_to_read]
-    selected_lines = [lines[pos] for pos in range(2, len(lines), 4)]
+    selected_lines = [line for line in lines if len(line) > 3 and line.find('-->') == -1]
 
     with ThreadPool(os.cpu_count()) as p:
         new_lines = p.map(func=translateLine,iterable=selected_lines) 
